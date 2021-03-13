@@ -20,6 +20,8 @@ mongoose
   .then(() => console.log(`DB connection successful`))
   .catch((err) => console.log(err));
 
+const workout = require("./models/workout");
+
 app.listen(PORT, (req, res) => {
   console.log(`App running at port `, PORT);
 });
