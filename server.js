@@ -1,9 +1,21 @@
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const express = require("express");
+const html = require("./routes/htmlRoutes").htmlRoutes;
+const apiRoutes = require("./routes/apiRoutes").apiRoutes;
+// const API = require("./public/api");
+
+const { urlencoded } = require("express");
+const logger = require("morgan");
 
 dotenv.config({ path: "./config.env" });
 const app = express();
+const router = express.Router();
+app.use(logger("dev"));
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+app.use(express.static(`${__dirname}/public`));
+
 const PORT = 3000;
 
 const DB = process.env.DATABASE.replace(
@@ -20,7 +32,8 @@ mongoose
   .then(() => console.log(`DB connection successful`))
   .catch((err) => console.log(err));
 
-const workout = require("./models/workout");
+html(app);
+apiRoutes(app);
 
 app.listen(PORT, (req, res) => {
   console.log(`App running at port `, PORT);
