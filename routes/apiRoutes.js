@@ -2,7 +2,15 @@ const Workout = require("../models/workoutModel");
 
 exports.apiRoutes = (app) => {
   app.get("/api/workouts", async (req, res) => {
-    Workout.find({})
+    Workout.aggregate([
+      {
+        $addFields: {
+          totalDuration: {
+            $sum: "$exercises.duration",
+          },
+        },
+      },
+    ])
       .then((data) => res.json(data))
       .catch((err) => console.log(err));
   });
