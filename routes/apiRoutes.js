@@ -17,7 +17,7 @@ exports.apiRoutes = (app) => {
 
   app.post("/api/workouts", (req, res) => {
     console.log(req.body);
-    Workout.create(req.body)
+    Workout.create({})
       .then((data) => res.json(data))
       .catch((err) => console.log(err));
   });
@@ -30,7 +30,17 @@ exports.apiRoutes = (app) => {
   });
 
   app.get(`/api/workouts/range`, (req, res) => {
-    Workout.find({})
+    Workout.aggregate([
+      {
+        $addFields: {
+          totalDuration: {
+            $sum: "$exercises.duration",
+          },
+        },
+      },
+    ])
+      .sort({ _id: -1 })
+      .limit(7)
       .then((data) => res.json(data))
       .catch((err) => console.log(err));
   });
