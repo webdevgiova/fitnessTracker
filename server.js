@@ -24,7 +24,7 @@ const PORT = process.env.PORT || 3000;
 // );
 
 mongoose
-  .connect(DATABASE || "mongodb://localhost/fitnessTracker", {
+  .connect(process.env.DATABASE || "mongodb://localhost/fitnessTracker", {
     useNewUrlParser: true,
     useCreateIndex: true,
     useFindAndModify: false,
